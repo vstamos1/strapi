@@ -259,8 +259,11 @@ class Strapi extends EventEmitter {
         this.config.environment === 'development' &&
         get(this.config, 'currentEnvironment.server.autoReload.enabled', true) === true
       ) {
+        this.server.close();
         process.send('reload');
       }
+
+      // this.server.
     };
 
     Object.defineProperty(reload, 'isWatching', {

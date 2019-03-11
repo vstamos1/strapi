@@ -27,6 +27,8 @@ const stringify = JSON.stringify;
 const backendUrl = Cypress.config('backendUrl');
 const serverRestartDelay = Cypress.config('serverRestartDelay');
 
+const WAIT_ON_CMD = 'wait-on http://localhost:1337'
+
 Cypress.Commands.add('createUser', () => {
   const user = {
     username: 'admin',
@@ -73,7 +75,7 @@ Cypress.Commands.add('createProductAndTagApis', (jwt = null) => {
         },
         body,
       })
-      .wait(serverRestartDelay)
+      .exec(WAIT_ON_CMD)
       .fixture('api/product.json')
       .then(body => {
         return cy
@@ -85,7 +87,7 @@ Cypress.Commands.add('createProductAndTagApis', (jwt = null) => {
             },
             body,
           })
-          .wait(serverRestartDelay);
+          .exec(WAIT_ON_CMD)
       });
   });
 });
@@ -93,7 +95,7 @@ Cypress.Commands.add('createProductAndTagApis', (jwt = null) => {
 Cypress.Commands.add('createCTMApis', (jwt = null) => {
   return cy
     .createProductAndTagApis(jwt)
-    .wait(serverRestartDelay)
+    .exec(WAIT_ON_CMD)
     .fixture('api/category.json')
     .then(body => {
       return cy
@@ -105,7 +107,7 @@ Cypress.Commands.add('createCTMApis', (jwt = null) => {
           },
           body,
         })
-        .wait(serverRestartDelay);
+        .exec(WAIT_ON_CMD)
     });
 });
 
@@ -144,7 +146,7 @@ Cypress.Commands.add('deleteApi', (model, jwt) => {
         Authorization: `Bearer ${jwt}`,
       },
     })
-    .wait(serverRestartDelay);
+    .exec(WAIT_ON_CMD)
 });
 
 Cypress.Commands.add('login', () => {
